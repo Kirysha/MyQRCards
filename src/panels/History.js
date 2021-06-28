@@ -12,22 +12,14 @@ import {
 import { Icon28QrCodeOutline } from "@vkontakte/icons";
 import bridge from "@vkontakte/vk-bridge";
 
-const History = ({ id, setActivePanel, setCurentLink }) => {
-  const [data, setData] = useState(["testItem"]);
-
-  useEffect(() => {
-    bridge
-      .send("VKWebAppStorageGetKeys")
-      .then(({ keys }) => setData(data.concat(keys)));
-  });
-
+const History = ({ id, setActivePanel, setCurentLink, data, setData }) => {
   const go = (e) => {
     bridge.send("VKWebAppOpenCodeReader").then(({ code_data }) => {
       if (code_data) {
         //window.location = code_data;
         const id = code_data
           .replace("https://card.myqrcards.com/links/", "")
-          .replace("/info", "");
+          .replace(/\?v=[0-9]*/gm, "");
         setCurentLink(code_data);
         setData(data.concat(id));
         bridge.send("VKWebAppStorageSet", { key: id, value: code_data });

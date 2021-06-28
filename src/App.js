@@ -11,6 +11,13 @@ import Frame from "./panels/Frame";
 const App = () => {
   const [activePanel, setActivePanel] = useState("history");
   const [curentLink, setCurentLink] = useState(null);
+  const [data, setData] = useState(["testItem"]);
+
+  useEffect(() => {
+    bridge
+      .send("VKWebAppStorageGetKeys")
+      .then(({ keys }) => setData(data.concat(keys)));
+  });
   //const [popout, setPopout] = useState(<ScreenSpinner size="large" />);
 
   // useEffect(() => {
@@ -37,6 +44,8 @@ const App = () => {
             id="history"
             setActivePanel={setActivePanel}
             setCurentLink={setCurentLink}
+            data={data}
+            setData={setData}
           />
           <Frame
             id="frame"
