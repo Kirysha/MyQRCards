@@ -31,7 +31,7 @@ const History = ({ id, setActivePanel, setCurentLink }) => {
         setCurentLink(code_data);
         setData(data.concat(id));
         bridge.send("VKWebAppStorageSet", { key: id, value: code_data });
-        setActivePanel("frame");
+        //setActivePanel("frame");
       }
     });
   };
