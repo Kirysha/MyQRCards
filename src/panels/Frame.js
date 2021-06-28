@@ -29,7 +29,7 @@ const Frame = (props) => (
 Frame.propTypes = {
   id: PropTypes.string.isRequired,
   setActivePanel: PropTypes.func.isRequired,
-  curentLink: PropTypes.string.isRequired,
+  curentLink: PropTypes.string,
 };
 
 export default Frame;
