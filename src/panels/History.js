@@ -13,24 +13,32 @@ import { Icon28QrCodeOutline } from "@vkontakte/icons";
 import bridge from "@vkontakte/vk-bridge";
 
 const History = ({ id, setActivePanel, setCurentLink }) => {
+  const [data, setData] = useState(["testItem"]);
+
+  useEffect(() => {
+    bridge
+      .send("VKWebAppStorageGetKeys")
+      .then(({ keys }) => setData(data.concat(keys)));
+  });
+
   const go = (e) => {
     bridge.send("VKWebAppOpenCodeReader").then(({ code_data }) => {
       if (code_data) {
         //window.location = code_data;
+        const id = code_data
+          .replace("https://card.myqrcards.com/links/", "")
+          .replace("/info", "");
         setCurentLink(code_data);
+        setData(data.concat(id));
+        bridge.send("VKWebAppStorageSet", { key: id, value: code_data });
         setActivePanel("frame");
-        bridge.send("VKWebAppStorageSet", { key: code_data, value: code_data });
       }
     });
   };
   const open = (code_data) => () => {
-    setCurentLink(code_data);
+    setCurentLink("https://card.myqrcards.com/links/" + code_data + "/info");
     setActivePanel("frame");
   };
-  useEffect(() => {
-    bridge.send("VKWebAppStorageGetKeys").then(({ keys }) => setData(keys));
-  });
-  const [data, setData] = useState([]);
   return (
     <Panel id={id}>
       <PanelHeader>История</PanelHeader>
@@ -39,9 +47,8 @@ const History = ({ id, setActivePanel, setCurentLink }) => {
           {data.map((item) => (
             <ContentCard
               key={item}
-              //subtitle={"Должность"}
+              subtitle={"Id"}
               header={item}
-              //caption={"a"}
               onClick={open(item)}
             />
           ))}
