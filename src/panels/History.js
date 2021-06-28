@@ -28,7 +28,7 @@ const History = ({ id, setActivePanel, setCurentLink }) => {
     setActivePanel("frame");
   };
   useEffect(() => {
-    bridge.send("VKWebAppStorageGetKeys").then((data) => setData(data));
+    bridge.send("VKWebAppStorageGetKeys").then(({ keys }) => setData(keys));
   });
   const [data, setData] = useState([]);
   return (
